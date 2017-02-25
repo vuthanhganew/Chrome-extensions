@@ -1,0 +1,41 @@
+﻿<!DOCTYPE html>
+<html dir="ltr">
+<head>
+	<meta charset="UTF-8">
+	<title>Streaming Media Player</title>	
+	<link href="css/video-jsf.css" rel="stylesheet">
+	<link href="videojs-loopbutton-master/videojs.loopbutton.css" rel="stylesheet">
+	<script src="js/video.dev.js"></script>
+	<script src="videojs-addbutton/videojs.openbutton.js"></script>
+	<script src="videojs-hotkeys-master/videojs.hotkeys.js"></script>
+	<script src="videojs-loopbutton-master/videojs.loopbutton.js"></script>
+	<script src="videojs-youtube/youtube.js"></script>
+	<script src="videojs-dailymotion/vjs.dailymotion.js"></script>
+	<script src="videojs-vimeo-master/vjs.vimeo.js"></script>
+	<script src="videojs-soundcloud/modifiedJS/media.soundcloud.js"></script>
+	<script src="videojs-twitch/twitch.js"></script>
+	<script src="js/scriptf.js"></script>	
+</head>
+<body style="margin:0;padding:0;overflow:hidden;width: 100%; height: 100%">
+	<div id="fileinput-container">
+		<h2>Restricted mode</h3>
+		<p style="text-align: left; font-size: 14px; color: cornsilk; margin: 0 auto 0 20%;">
+			Not using store flv with temporary storage<br>
+			Not using save flv with playlist
+		</p>
+		<div style="margin-top:16px" id="button-container">
+			<label style="font-size: 16px; color: orangered;">Choose FLV Files</label><br>
+			<label style="font-size: 20px; color: #fff;">Click Me!</label><br>
+ 			<input type="file" id="file_input" accept=".flv" multiple style="visibility:hidden">
+		</div>
+	</div>
+	<div id="video-container" style="margin:0;padding:0;overflow:hidden;width: 100%; height: 100%">
+		<video id="example_video_1" class="video-js vjs-default-skin" 
+			controls preload="none" width="320" height="240" data-setup="{}">
+		</video>
+	</div>
+	<div id="cover-dailymplayer"></div>
+	<div id="dbclick-cover"></div>
+	<span id="loading-image-span" class=".blink">Loading data, please wait</span>
+</body>
+</html>

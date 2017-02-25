@@ -1,0 +1,22 @@
+﻿<!DOCTYPE html>
+<html dir="ltr">
+<head>
+	<meta charset="UTF-8">
+	<title>Streaming Media Player</title>	
+	<link href="css/video-jsb.css" rel="stylesheet">
+	<script src="js/scriptb.js"></script>	
+</head>
+<body style="margin:0;padding:0;overflow:hidden;width: 100%; height: 100%">
+	<div id="closebutton">X</div>
+	<div class="input-container">
+		<h3 style="color:#f54997;font-size:13px;margin: 0 0 6px 0;">Browser Mode</h3>
+		Page URL <label id="sample-button">Sample URL</label><br>
+		<input type="text" id="url-input" placeholder="URL"><button id="url-okbutton">OK</button><br>
+		<div class="tag-container">
+			Target Video Player (HTML Tag)<br>
+			<input type="text" id="target-input" placeholder="object,embed,video,audio" value="object,embed,video,iframe,audio"><br>
+			min-width:<input type="number" value="640" id="width-input"> min-height:<input type="number" value="360" id="height-input">
+		</div>
+	</div>
+</body>
+</html>

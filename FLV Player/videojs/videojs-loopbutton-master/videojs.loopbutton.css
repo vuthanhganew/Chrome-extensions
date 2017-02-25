@@ -1,0 +1,89 @@
+/* ! Loopbutton v1.0.0 Copyright 2014 Charlotte Dunois https://github.com/CharlotteDunois/videojs-loopbutton/blob/master/LICENSE.md ! */
+
+@font-face{
+	font-family: 'VideoJS-LoopButton';
+	src: url('VideoJS-LoopButton.woff') format('woff');
+	font-weight: normal;
+	font-style: normal;
+}
+@font-face {
+  font-family: 'Awesome';
+  src: url('../font/fontawesome-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+.vjs-default-skin .vjs-loop-button  {
+	outline: none;
+	text-align: center;
+	margin: 0;
+	padding: 0;
+	height: 3.0em;
+	width: 30px;
+}
+.vjs-default-skin .vjs-loop-button:before  {
+	font-family: VideoJS-LoopButton;
+	font-size: 1.5em;
+	line-height: 2em;
+	content: "\e71c"; /* loop icon */
+	width: 100%;
+	height: 100%;
+}
+.vjs-default-skin .vjs-dialog-button  {
+	outline: none;
+	text-align: center;
+	padding: 0;
+	height: 3.0em;
+	width: 3em;
+}
+.vjs-default-skin .vjs-dialog-button:before  {
+	font-family: Awesome;
+	font-size: 1.5em;
+	line-height: 2em;
+	content: "\f052"; /* loop icon */
+	width: 100%;
+	height: 100%;
+}
+
+
+.vjs-default-skin .vjs-top-button  {
+	outline: none;
+	text-align: center;
+	margin: 0;
+	padding: 0;
+	height: 3.0em;
+	width: 34px;
+}
+.vjs-default-skin .vjs-top-button:before  {
+	font-family: Awesome;
+	font-size: 1.5em;
+	line-height: 2em;
+	content: "\f0ca"; /* loop icon */
+	width: 100%;
+	height: 100%;
+}
+
+
+
+
+
+
+
+.vjs-control-active {
+	color: orange;
+	text-shadow: 0em 0em 1em orange;
+}
+.vjs-default-skin .vjs-chapters-button:before {
+	font-family: Awesome;
+	font-size: 1.5em;
+	line-height: 2em;
+	content: "\f052"; /* loop icon */
+	width: 100%;
+	height: 100%;
+  
+}
+.vjs-default-skin .vjs-chapters-button.vjs-menu-button .vjs-menu .vjs-menu-content {
+  width: 24em;
+  left: -12em;
+}
+
+

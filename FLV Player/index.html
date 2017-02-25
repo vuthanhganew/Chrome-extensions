@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+	<meta charset="UTF-8">
+	<title>Streaming Media Player</title>	
+	<link href="css/index.css" rel="stylesheet" type="text/css">
+	<script src="js/jquery-2.1.3.min.js"></script>
+    <script src="js/jquery.ui.core.js"></script>
+    <script src="js/jquery.ui.widget.js"></script>
+    <script src="js/jquery.ui.mouse.js"></script>
+    <script src="js/jquery.ui.sortable.js"></script>
+	<script src="js/ccode.js"></script>
+	<script src="js/index.js"></script>
+</head>
+<!-- 
+ * Copyright (C) 2014 Kunihiro Ando
+ *      senna5150ando@gmail.com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ -->
+<body>
+	<div id="framevisible-button"></div>
+	<div id="custom-frame" style="-webkit-app-region: drag" class="custom-frame-class">
+		<span class="modal-awesome-bookmarks" id="modal-awesome-bookmarks2" style="-webkit-app-region:  no-drag" title="Bookmarks"></span><span class="modal-awesome-browser" id="modal-awesome-browser2" style="-webkit-app-region:  no-drag" title="Browser mode"></span><span class="modal-awesome-prevideo" style="-webkit-app-region:  no-drag" title="previous video"></span><span class="modal-awesome-nextvideo" style="-webkit-app-region:  no-drag" title="next video"></span><span class="modal-awesome-settings" style="-webkit-app-region:  no-drag"></span><span class="modal-awesome-frame" style="-webkit-app-region:  no-drag"></span><span class="modal-awesome-minus" style="-webkit-app-region:  no-drag"></span><span class="modal-awesome-max" style="-webkit-app-region:  no-drag"></span><span class="modal-awesome-close" style="-webkit-app-region:  no-drag"></span>
+	</div>
+	<div id="webview-html-container">
+		<webview id="webviewv" class="webview" src="videojs/video-jsv.html" partition="html5-webview"></webview>
+	</div>
+	<div id="webview-flash-container">
+		<webview id="webviewf" class="webview" src="http://127.0.0.1:48716/videojs/video-jsf.html"></webview>
+	</div>
+	<div id="webview-browser-container">
+		<webview id="webviewb" class="webview" src="http://127.0.0.1:48716/videojs/video-jsb.html" partition="browser-webview"></webview>
+	</div>
+	<div id="FileModal" class="modalDialog" style="z-index:214748364;">
+		<div class="modal-container">
+			<div id="custom-modal-frame" style="-webkit-app-region: drag" class="custom-frame-class">	
+				<span class="modal-awesome-extension" id="modal-awesome-extension" style="-webkit-app-region:  no-drag" title="Get Extension"></span><span class="modal-awesome-bookmarks" id="modal-awesome-bookmarks" style="-webkit-app-region:  no-drag" title="Bookmarks"></span><span class="modal-awesome-browser" id="modal-awesome-browser" style="-webkit-app-region:  no-drag" title="Browser mode"></span><span class="modal-awesome-pin" id="modal-awesome-pid0" style="-webkit-app-region:  no-drag;"></span><span class="modal-awesome-frame" style="-webkit-app-region:  no-drag"></span><span class="modal-awesome-minus" style="-webkit-app-region:  no-drag"></span><span class="modal-awesome-max" style="-webkit-app-region:  no-drag"></span><span class="modal-awesome-close" style="-webkit-app-region:  no-drag"></span>
+			</div>
+			<div id="file-modal-item">
+				<div id="file-modal-inner-item" class="modal-inner">
+					<div id="masave-slot-container">			
+						<button title="Restricted mode" style="width: inherit; padding: 0 2px; border-radius: 2px;border: 0; border-bottom: 1px solid #aaa;" id="restricted-mode-button" class="pink_button">Crash on flv?</button>
+					</div>
+					<span class="awesome"> File</span>
+				</div>
+			</div>
+			<div id="dir-modal-item">
+				<div id="dir-modal-inner-item" class="modal-inner">
+					<span class="awesome"> Folder</span>
+				</div>
+			</div>
+			<div id="url-modal-item">
+				<div id="url-modal-inner-item" class="modal-inner">
+					<span class="awesome"> URL</span>
+				</div>
+			</div>
+			<div id="plist-modal-item">
+				<div id="plist-modal-inner-item" class="modal-inner">
+					<span class="awesome"> Playlist</span>
+				</div>
+			</div>
+			<div id="localstorage-modal-item">
+				<div id="localstorage-modal-inner-item" class="modal-inner">
+					<span class="awesome"> Storage</span>
+				</div>
+			</div>
+		</div>
+		<div id="localstorage-container">
+			<span id="localstorage-close" style="-webkit-app-region:  no-drag">X</span>		
+			<div id="localstorage-item-container">
+				
+			</div>
+		</div>
+	</div>
+	<div id="PlaylistModal" class="modalDialog">
+		<div class="playlistcontainer">
+			<div id="playlist-store-container">
+				<button style="-webkit-app-region:  no-drag" id="save-slot1-button" class="pink_button">Store LocalStorage</button>
+				<button style="-webkit-app-region:  no-drag" id="save-playlist-button" class="pink_button">Save File</button>
+			</div>
+			<span id="playlist-close" style="-webkit-app-region:  no-drag">X</span>
+			<ul id="playlist-item-container"></ul>
+		</div>
+	</div>	
+	<div id="confirmModal" class="modalDialog">
+		<div class="playlistcontainer2" id="playlistcontainer2">
+			<h3>Store LocalStorage</h3>
+			<input type="text" id="input-storage-name" placeholder="Storage name"><br>
+			<button class="savebutton" id="confirm-save-button">OK</button><br>
+			<button class="savebutton" id="confirm-cancel-button">Cancel</button><br>
+		</div>
+	</div>
+	<div id="URLModal" class="modalDialog2">
+		<div class="modal-container2">
+			<div id="searchtype-container">
+			     <div style="float:left">		     	
+					<input type="radio" id="rdselectstream5" name="rdsrchtype" value="">
+					<label class="radio" style="color: aqua;" for="rdselectstream5" title="Youtube Live"> Youtube Live</label>
+					<input type="radio" id="rdselectstream1" name="rdsrchtype" value="" checked="">
+					<label class="radio" for="rdselectstream1" title="Youtube"> Youtube</label>
+					<input type="radio" id="rdselectstream2" name="rdsrchtype" value="">
+					<label for="rdselectstream2" class="radio"> Dailymotion</label>
+					<input type="radio" id="rdselectstream3" name="rdsrchtype" value="">
+					<label class="radio" for="rdselectstream3" title="soundcloud"> Soundcloud</label>
+			     </div>
+			     <div style="float:left">
+					<input type="radio" id="rdselectstream4" name="rdsrchtype" value="">
+					<label class="radio" for="rdselectstream4" title="Twitch"> Twitch</label>
+					<input type="radio" id="rdselectstream8" name="rdsrchtype" value="">
+					<label class="radio" for="rdselectstream8" title="Twitch"> Vimeo</label>
+					<input type="radio" id="rdselectstream6" name="rdsrchtype" value="">
+					<label class="radio" for="rdselectstream6" title="Podcast"> Podcast</label>
+					<input type="radio" id="rdselectstream7" name="rdsrchtype" value="">
+					<label class="radio" for="rdselectstream7" title="Shoutcast"> Shoutcast</label>
+			     </div>
+			</div>
+			<div class="youtube-start-container">
+				<button id="youtube-start-search">Search Video</button><br>
+			</div>
+			<div style="color:#f54997;">
+				File address or Youtube url
+			</div>
+			<div class="youtube-input-container">
+				<input type="text" id="url-input" placeholder="URL"><button id="url-okbutton" placeholder="URL">OK</button>
+			</div>
+			<div id="youtube-serach-container">
+				<h3 style="color:#f54997" id="youtube-serach-header">Video Search</h3>
+				<span id="youtube-search-close" style="-webkit-app-region:  no-drag">X</span>
+				<div>
+					<div id="live-search-container" style="display:none;width:99%;">			
+						<select id="youtube-live-ccode-type" class="ytselectclass" title="Country Code">
+			                <option value=""></option>
+			            </select><select id="youtube-live-search-type" class="ytselectclass">
+			                <option value="Search">Search</option>
+			                <option value="News OR Politics">News &amp; Politics</option>
+			                <option value="Gaming">Gaming</option>
+			                <option value="Sports">Sports</option>
+			                <option value="Music">Music</option>
+			                <option value="Google+ Hangouts On Air">Google+ Hangouts On Air</option>
+			                <option value="Autos OR Vehicles">Autos &amp; Vehicles</option>
+			                <option value="Comedy">Comedy</option>
+			                <option value="Education">Education</option>
+			                <option value="Entertainment">Entertainment</option>
+			                <option value="Film OR Animation">Film &amp; Animation</option>
+			                <option value="How-to OR Style">How-to &amp; Style</option>
+			                <option value="Nonprofits OR Activism">Nonprofits &amp; Activism</option>
+			                <option value="People OR Blogs">People &amp; Blogs</option>
+			                <option value="Pets OR Animals">Pets &amp; Animals</option>
+			                <option value="Science OR Technology">Science &amp; Technology</option>
+			                <option value="Travel OR Events">Travel &amp; Events</option>
+			            </select><input type="text" id="youtube-live-search-input"><button id="youtube-live-search-button">Search</button>
+					</div>
+					<div id="normal-search-container" style="display:inline-block;width:99%">					
+						<input type="text" id="youtube-search-input"><button id="youtube-search-button">Search</button>
+						<select id="youtube-search-type" class="ytselectclass">
+			                <option value=""></option>
+			                <option value="short">short</option>
+			                <option value="medium">medium</option>
+			                <option value="long">long</option>
+			                <option value="playlist">playlist</option>
+			                <option value="channel">channel</option>
+			            </select>
+						<select id="twitch-search-type" class="ytselectclass">
+			                <option value="live">live</option>
+ 			                <option value="games">games</option>
+			                <option value="top">games by number of viewers</option>
+			                <option value="topv">videos by number of views</option>
+							<option value="channels">channels</option>
+							<option value="featured">featured</option>
+			            </select>
+			        </div>
+				    <div id="shoutcast-container" style="display:none;width:99%;"> 
+				        <select id="castradioselect" class="rdslctclass">
+			                <option value="">Shoutcast</option>
+			                <option value="/Genre?name=Alternative">Radionomy</option>
+			            </select><div id="shoutcast-button-container" style="display:inline-block">
+					        <select id="shoutcastmain" class="rdslctclass">
+				                <option value=""></option>
+				                <option value="/Genre?name=Alternative">Alternative</option>
+				                <option value="/Genre?name=Blues">Blues</option>
+				                <option value="/Genre?name=Classical">Classical</option>
+				                <option value="/Genre?name=Country">Country</option>
+				                <option value="/Genre?name=Decades">Decades</option>
+				                <option value="/Genre?name=Easy Listening">Easy Listening</option>
+				                <option value="/Genre?name=Electronic">Electronic</option>
+				                <option value="/Genre?name=Folk">Folk</option>
+				                <option value="/Genre?name=Inspirational">Inspirational</option>
+				                <option value="/Genre?name=International">International</option>
+				                <option value="/Genre?name=Jazz">Jazz</option>
+				                <option value="/Genre?name=Latin">Latin</option>
+				                <option value="/Genre?name=Metal">Metal</option>
+				                <option value="/Genre?name=Misc">Misc</option>
+				                <option value="/Genre?name=New Age">New Age</option>
+				                <option value="/Genre?name=Pop">Pop</option>
+				                <option value="/Genre?name=Public Radio">Public Radio</option>
+				                <option value="/Genre?name=RB and Urban">R&amp;B and Urban</option>
+				                <option value="/Genre?name=Rap">Rap</option>
+				                <option value="/Genre?name=Reggae">Reggae</option>
+				                <option value="/Genre?name=Rock">Rock</option>        
+				                <option value="/Genre?name=Seasonal and Holiday">Seasonal and Holiday</option>
+				                <option value="/Genre?name=Soundtracks">Soundtracks</option>
+				                <option value="/Genre?name=Talk">Talk</option>
+				                <option value="/Genre?name=Themes">Themes</option>
+					        </select><select id="shoutcastsub" class="rdslctclass"></select>
+					    </div><div id="radionomy-button-container" style="display:none;">
+				            <select id="radionomymain" class="rdslctclass">
+				                <option value=""></option>
+				                <option value="/en/style/Local">Local</option>
+				                <option value="/en/style/Blues">Blues</option>
+				                <option value="/en/style/Chill-out">Chill-out</option>
+				                <option value="/en/style/Classic">Classic</option>
+				                <option value="/en/style/Country">Country</option>
+				                <option value="/en/style/Electronic">Electronic</option>
+				                <option value="/en/style/Hits">Hits</option>
+				                <option value="/en/style/Jazz">Jazz</option>
+				                <option value="/en/style/Latin">Latin</option>
+				                <option value="/en/style/Metal">Metal</option>
+				                <option value="/en/style/News%20-%20Talk">News - Talk</option>
+				                <option value="/en/style/Pop-Rock">Pop-Rock</option>
+				                <option value="/en/style/Reggae">Reggae</option>
+				                <option value="/en/style/Urban">Urban</option>
+				                <option value="/en/style/Various">Various</option>
+				                <option value="/en/style/World">World</option>
+				            </select><select id="radionomysub" class="rdslctclass"></select>
+			            </div><button id="shoutcast-stop-button">Stop</button><label class="shoutcast-volume-label"></label><input id="shoutcast-volume" type="number" value="30" step="1" min="0" max="100" title="Volume">
+				    </div>
+				</div>
+				<div id="yt-videos-container"></div>
+			</div>
+		</div>
+	</div>
+	<div id="loadingModal" class="modalDialog">
+		<span class="circles"></span>
+	</div>	
+	<div id="aboutModal" class="modalDialog">
+		<div class="aboutcontainer">
+			<span id="about-close" style="-webkit-app-region:  no-drag">X</span>
+			<div id="about-message-container">
+				<div>
+					<p>
+						<h3>Streaming Media Player</h3>
+						<h3>(c) Kunihiro Ando</h3>
+						<a href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank">Licensed under the Apache License, Version 2.0</a><br><br>
+					</p>
+				</div>
+				<div style="margin-top:24px;padding-top:24px; border-top:solid 1px #ccc;">
+				</div>
+				This software includes the work that is distributed in the Apache License 2.0<br>
+				<h3><a href="http://www.videojs.com/" target="_blank" style="font-size: 16px">Video.js</a><span> - open source HTML5 &amp; Flash video player</span></h3>
+				<div>
+					<p>
+						<h3 style="font-size: 16px">(c) 2014 Brightcove, Inc.</h3>
+					</p>
+					<p>
+						Video.js is licensed under the Apache License, Version 2.0.<br>
+						<a href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank">http://www.apache.org/licenses/LICENSE-2.0</a><br><br>
+						<a href="http://www.videojs.com/" target="_blank">http://www.videojs.com/</a><br>
+						<a href="https://github.com/videojs/video.js" target="_blank">https://github.com/videojs/video.js</a><br>
+					</p>
+				</div>
+				<div style="margin-top:54px;padding-top:54px; border-top:solid 1px #ccc;">
+					<p>
+						<h3><a href="https://chrome.google.com/webstore/detail/web-server-for-chrome/ofhbbkphhbklhfoeikjpcbhemlocgigb" target="_blank">Web Server for Chrome</a></h3>
+						<h3>(c) 2014 Kyle Graehl</h3>
+					</p>
+					<p>
+						MIT license<br>
+						<a href="http://opensource.org/licenses/mit-license.php" target="_blank">http://opensource.org/licenses/mit-license.php</a><br><br>
+						<a href="https://github.com/kzahel/web-server-chrome" target="_blank">https://github.com/kzahel/web-server-chrome</a><br><br><br>
+					</p>
+				</div>
+				<div style="margin-top:34px;padding-top:34px; border-top:solid 1px #ccc;">
+					<p>
+						<h3>Video.js Plugins</h3>
+					</p>
+					<p>
+						<a href="https://github.com/mangui/video-js-swf" target="_blank">video-js-swf (HLS)</a><labe style="font-weight:bold"> Guillaume du Pontavice</labe><br>
+						<a href="https://github.com/Dash-Industry-Forum/dash.js" target="_blank">dash.js</a><labe style="font-weight:bold"> DASH-IF</labe><br>
+						<a href="https://github.com/eXon/videojs-youtube" target="_blank">videojs-youtube</a><labe style="font-weight:bold"> Benoit Tremblay</labe><br>
+						<a href="https://github.com/eXon/videojs-vimeo" target="_blank">videojs-vimeo</a><labe style="font-weight:bold"> Benoit Tremblay</labe><br>
+						<a href="https://github.com/benjipott/video.js-dailymotion" target="_blank">videojs-dailymotion</a><labe style="font-weight:bold"> benjipott</labe><br>
+						<a href="https://github.com/LoveIsGrief/videojs-soundcloud" target="_blank">videojs-soundcloud</a><labe style="font-weight:bold"> Michael Vogel</labe><br>
+						<a href="https://github.com/ctd1500/videojs-hotkeys" target="_blank">videojs-hotkeys</a><labe style="font-weight:bold"> Chris Dougherty</labe><br>
+						<a href="https://github.com/CharlotteDunois/videojs-loopbutton" target="_blank">videojs-loopbutton</a><labe style="font-weight:bold"> Charlotte Dunois</labe><br><br><br>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="settingsModal" class="modalDialog">
+		<div class="aboutcontainer">
+			<span id="settings-close" style="-webkit-app-region:  no-drag">X</span>
+			<div id="settings-message-container">
+				<span class="modal-awesome-open menu-item" id="modal-awesome-open" style="-webkit-app-region:no-drag"><label>Open</label></span>
+				<span class="modal-awesome-playlist menu-item" id="modal-awesome-playlist" style="-webkit-app-region:no-drag"><label>Playlist</label></span>
+				<span class="modal-awesome-browser menu-item" style="-webkit-app-region:no-drag"><label>Browser Mode</label></span>
+				<span class="modal-awesome-bgm menu-item" id="modal-awesome-bgm" style="-webkit-app-region:no-drag"><label>Background Music</label></span>
+				<span class="modal-awesome-pin menu-item" id="modal-awesome-pid" style="-webkit-app-region:no-drag"><label>Always on Top</label></span>
+				<span class="modal-awesome-blank menu-item" style="-webkit-app-region:  no-drag"><label>Disable Screen Blanking</label></span>
+				<span class="modal-awesome-sleep menu-item" id="modal-awesome-sleep" style="-webkit-app-region:  no-drag"><label>Auto Close</label></span>
+				<span class="modal-awesome-color menu-item" id="modal-awesome-color" style="-webkit-app-region:  no-drag"><label>Color Adjustment</label></span>
+				<span class="modal-awesome-flash menu-item" id="modal-awesome-flash" style="-webkit-app-region:  no-drag"><label>Flash Playback Option</label></span>
+				<span class="modal-awesome-about menu-item" style="-webkit-app-region:  no-drag"><label>About</label></span>
+			</div>
+		</div>
+	</div>
+	<div id="BookmarkModal" class="modalDialog">
+		<div class="bookmarkcontainer">
+			<span id="bookmark-close" style="-webkit-app-region:  no-drag">X</span>
+			<h3 style="color:#f54997;font-size:12px">Browser Mode Bookmarks</h3>
+			<button id="bookmark-add-button" style="-webkit-app-region:  no-drag">Add Current</button>
+			<ul id="bookmark-item-container"></ul>
+		</div>
+	</div>
+	<div id="sleepModal" class="modalDialog">
+		<div class="sleepcontainer">
+			<span id="sleep-close" style="-webkit-app-region:  no-drag">X</span>
+			<h3 style="color:#f54997;font-size: 15px;margin: 6px;">Auto close</h3>
+			<div class="sleep-input-container">
+				<div style="border-top:solid 1px #ccc;padding: 12px 0 0 0;">
+					<input type="number" id="sleep-time" value="45" step="1" min="1" max="150">minutes<br>
+					<input type="checkbox" id="sleep-set" value="">
+					<label for="sleep-set" class="checkbox">SET</label>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="SrtFontModal" class="modalDialog">
+		<div class="sleepcontainer">
+			<span id="srtfont-close" style="-webkit-app-region:  no-drag">X</span>
+			<h3 style="color:#f54997;font-size: 15px;margin: 6px;">Srt Font Size</h3>
+			<div class="sleep-input-container">
+				<div style="border-top:solid 1px #ccc;padding: 12px 0 0 0;">
+					<input type="number" id="srtfont-size" value="16" step="1" min="6" max="50"> px<br>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="colorModal" class="modalDialog">
+		<div class="colorcontainer">
+			<span id="color-close" style="-webkit-app-region:  no-drag">X</span>
+			<h3 style="color:#f54997;font-size: 15px;margin: 6px;">Color Adjustment</h3>
+			<div class="sleep-input-container">
+				<div style="font-size: 13px;border-top:solid 1px #ccc;padding: 12px 0 0 0;">
+					<button id="reset-color-adjust"> Reset </button>
+					<div class="range-container">
+						brightness: <label id="brightness-label">100%</label><br>
+						<input type="range" value="100" max="200" min="0" step="1" id="brightness-range">
+					</div>
+					<div class="range-container">
+						contrast: <label id="contrast-label">100%</label><br>
+						<input type="range" value="100" max="300" min="0" step="1" id="contrast-range">
+					</div>
+					<div class="range-container">
+						saturate: <label id="saturate-label">100%</label><br>
+						<input type="range" value="100" max="500" min="0" step="1" id="saturate-range">
+					</div>
+					<div class="range-container">
+						hue-rotate: <label id="hue-rotate-label">0deg</label><br>
+						<input type="range" value="0" max="360" min="0" step="1" id="hue-rotate-range">
+					</div>
+					<div class="range-container" style="display:none">
+						grayscale: <label id="grayscale-label">0</label><br>
+						<input type="range" value="0" max="1" min="0" step="0.1" id="grayscale-range">
+					</div>
+					<div class="range-container">
+						sepia: <label id="sepia-label">0</label><br>
+						<input type="range" value="0" max="1" min="0" step="0.1" id="sepia-range">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="flashplayModal" class="modalDialog">
+		<div class="sleepcontainer">
+			<span id="flash-close" style="-webkit-app-region:  no-drag">X</span>
+			<h3 style="color:#f54997;font-size: 15px;margin: 6px;">Flash Playback Option</h3>
+			<div class="sleep-input-container">
+				<div style="border-top:solid 1px #ccc;padding: 12px 0 0 0;">
+					<input type="radio" id="flash-playback-streaming" style="display:none" name="flash-playback-mode" checked><label for="flash-playback-streaming" class="fradio">Streaming</label><br>
+					<input type="radio" id="flash-playback-direct" style="display:none" name="flash-playback-mode"><label for="flash-playback-direct" class="fradio">Normal</label><br><br>
+					<label style="display: inline-block;width: 80%;margin: auto;text-align: left;">CPU usage    : Streaming &gt; Normal</label>
+					<br>
+					<label style="display: inline-block;width: 80%;margin: auto;text-align: left;">Memory usage : Streaming &lt; Normal</label>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="charseModal" class="modalDialog">
+		<div class="charsetcontainer">
+			<div>
+				<select id="char-set-select">
+					<option value="utf-8" selected>utf-8</option>
+					<option value="ibm866">ibm866</option>
+					<option value="iso-8859-2">iso-8859-2</option>
+					<option value="iso-8859-3">iso-8859-3</option>
+					<option value="iso-8859-4">iso-8859-4</option>
+					<option value="iso-8859-5">iso-8859-5</option>
+					<option value="iso-8859-6">iso-8859-6</option>
+					<option value="iso-8859-7">iso-8859-7</option>
+					<option value="iso-8859-8">iso-8859-8</option>
+					<option value="iso-8859-8-i">iso-8859-8-i</option>
+					<option value="iso-8859-10">iso-8859-10</option>
+					<option value="iso-8859-13">iso-8859-13</option>
+					<option value="iso-8859-14">iso-8859-14</option>
+					<option value="iso-8859-15">iso-8859-15</option>
+					<option value="iso-8859-16">iso-8859-16</option>
+					<option value="koi8-r">koi8-r</option>
+					<option value="koi8-u">koi8-u</option>
+					<option value="macintosh">macintosh</option>
+					<option value="windows-874">windows-874</option>
+					<option value="windows-1250">windows-1250</option>
+					<option value="windows-1251">windows-1251</option>
+					<option value="windows-1252">windows-1252</option>
+					<option value="windows-1253">windows-1253</option>
+					<option value="windows-1254">windows-1254</option>
+					<option value="windows-1255">windows-1255</option>
+					<option value="windows-1256">windows-1256</option>
+					<option value="windows-1257">windows-1257</option>
+					<option value="windows-1258">windows-1258</option>
+					<option value="x-mac-cyrillic">x-mac-cyrillic</option>
+					<option value="gbk">gbk</option>
+					<option value="gb18030">gb18030</option>
+					<option value="big5">big5</option>
+					<option value="euc-jp">euc-jp</option>
+					<option value="iso-2022-jp">iso-2022-jp</option>
+					<option value="shift_jis">shift_jis</option>
+					<option value="euc-kr">euc-kr</option>
+					<option value="replacement">replacement</option>
+					<option value="utf-16be">utf-16be</option>
+					<option value="utf-16le">utf-16le</option>
+					<option value="x-user-defined">x-user-defined</option>
+				</select>
+			</div>
+			<div>
+				<button id="open-charset-input">Open</button>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,48 @@
+{
+   "app": {
+      "background": {
+         "scripts": [ "web-server-chrome/underscore.js", "web-server-chrome/common.js", "web-server-chrome/mime.js", "web-server-chrome/buffer.js", "web-server-chrome/request.js", "web-server-chrome/stream.js", "web-server-chrome/connection.js", "web-server-chrome/webapp.js", "web-server-chrome/handlers.js", "web-server-chrome/httplib.js", "web-server-chrome/background.js" ]
+      }
+   },
+   "description": "Streaming Media Player",
+   "file_handlers": {
+      "any": {
+         "extensions": [ "flv", "mp4" ],
+         "types": [ "video/*" ]
+      },
+      "text": {
+         "extensions": [ "mfppl" ],
+         "types": [ "text/*" ]
+      }
+   },
+   "icons": {
+      "128": "img/icon128.png",
+      "16": "img/icon16.png",
+      "32": "img/icon32.png",
+      "48": "img/icon48.png"
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmcxs4crPnhFSKJaFkjqSPT9zuFmFiOcESX9Dbj94OVGrTSvE+qca+GQLhlE+A0P1jvUtOtWgmRHnjcqL51pkiGOFcCWL52S2xyV0pigi9wJT5M5AXqB3gBj5/XM1mHhSJTtuLsIrVnPavfH5fuiIIVPFl8K2CIvyoZD70JBMA6IJ5JSmdPgW2zqYvFeQBwKLjkjgxhKLNFICOoKKv2+D7e91bHFZnCQtE8cA5HiHD0zd/gEwjPHDJmws0v2iahIwXVzKZZbZs1pWS98KpWQckAqBCupDEyi8OFGw+xruK+KrNYpB+GzvBQl0aAbTYJ4vtApd1l2IJu+j9OF+2EVb+QIDAQAB",
+   "manifest_version": 2,
+   "minimum_chrome_version": "40",
+   "name": "Streaming Media Player",
+   "offline_enabled": true,
+   "permissions": [ {
+      "fileSystem": [ "write", "directory", "retainEntries" ]
+   }, "webview", "storage", "fullscreen", "alwaysOnTopWindows", "contextMenus", "power", "alarms", "identity", "https://api.vimeo.com/oauth/*", "\u003Call_urls>" ],
+   "sockets": {
+      "tcpServer": {
+         "listen": [ "127.0.0.1:48716" ]
+      }
+   },
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "7.6",
+   "webview": {
+      "partitions": [ {
+         "accessible_resources": [ "*.html", "*.css", "*.js", "*.vtt", "*.srt", "*.swf", "*.woff", "*.eot", "*.svg", "*.ttf" ],
+         "name": "html5-webview"
+      }, {
+         "accessible_resources": [ "*.html", "*.css", "*.js", "*.swf" ],
+         "name": "browser-webview"
+      } ]
+   }
+}
